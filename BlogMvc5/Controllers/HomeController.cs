@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using BlogMvc5.Models;
 
 namespace BlogMvc5.Controllers
 {
@@ -19,8 +20,15 @@ namespace BlogMvc5.Controllers
 
             return View();
         }
-
+        [HttpGet]
         public ActionResult Contact()
+        {
+            ViewBag.Message = "Your contact page.";
+
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Contact(MailForm form)
         {
             ViewBag.Message = "Your contact page.";
 

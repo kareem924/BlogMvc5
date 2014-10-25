@@ -48,11 +48,25 @@ namespace BlogMvc5.Controllers
         // POST: /Posts/Create
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult Create(Posts postToCreate) //, Tag newTag)
+        public ActionResult Create(Posts postToCreate, string Tags) //, Tag newTag)
         {
             try
             {
                 // TODO: Add insert logic here
+                string[] AllTags = Tags.Split(new char[] {','});
+                foreach (var tag in AllTags)
+                {
+                    var existedTag = GetTagIfExisted(tag);
+                    if (existedTag!=null)
+                    {
+                        postToCreate.Tags.Add(existedTag);
+                    }
+                    else
+                    {
+                        postToCreate.Tags.Add(new Tag { TagName = tag });
+                    }
+                   
+                }
                 _uow.Posts.Add(postToCreate);
 
                 //_uow.Tags.Add(newTag);
@@ -116,6 +130,24 @@ namespace BlogMvc5.Controllers
             {
                 return View();
             }
+        }
+          private Tag GetTagIfExisted(string tag)
+          {
+              var selectedTag = _uow.Tags.List(p => p.TagName == tag).FirstOrDefault();
+              return selectedTag;
+
+          }
+
+        public ActionResult Tags(int id)
+        {
+            var PostedByTag = _uow.Posts.List(post => post.Tags.Where(tag => tag.TagId == id).Count() > 0);
+            return View("Index", PostedByTag);
+        }
+
+        public JsonResult AutoTags()
+        {
+            var results = _uow.Tags.List().Select(t=>t.TagName);
+            return Json(results, JsonRequestBehavior.AllowGet);
         }
     }
 }

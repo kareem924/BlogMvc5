@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web;
 
 namespace BlogMvc5.Models.Repositories
@@ -15,8 +16,12 @@ namespace BlogMvc5.Models.Repositories
             this._db = db;
             entity = this._db.Set<T>();
         }
-        public IEnumerable<T> List()
+        public IQueryable<T> List(Expression<Func<T,bool>> filter =null )
         {
+            if (filter !=null)
+            {
+                return entity.Where(filter);
+            }
             return entity;
         }
 
@@ -41,5 +46,7 @@ namespace BlogMvc5.Models.Repositories
             var selectedEntity = entity.Find(id);
             _db.Entry<T>(selectedEntity).State = EntityState.Deleted;
         }
+
+      
     }
 }

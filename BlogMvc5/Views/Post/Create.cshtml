@@ -26,6 +26,17 @@
             </td>
         </tr>
         <tr>
+            <td>
+                @Html.LabelFor(model => model.Tags)
+            </td>
+            <td>
+                <input type="hidden" name="tags" id="tags" style="width:600px" tabindex="-1" class="select2-offscreen form-control">
+                <div class="select2-container select2-container-multi" id="s2id_e20" style="width: 600px;">
+                </div>
+                <p>You can type more than one tag using comma(ex: MVCV,RAZOR,ETC)</p>
+            </td>
+        </tr>
+        <tr>
             <td></td>
             <td><input type="submit" value="Create" class="btn btn-success" /></td>
         </tr>
@@ -33,9 +44,21 @@
 }
 @section scripts
 {
-    <script src="~/Scripts/ckeditor/ckeditor.js"></script>
-<script>
-    CKEDITOR.replace('ckeditor', { filebrowserImageUploadUrl: '/Uploader/Upload', filebrowserImageBrowseUrl: "/Uploads" });
-</script>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/ckeditor/ckeditor.js"></script>
+<link href="~/Content/css/select2.css" rel="stylesheet" />
+<link href="~/Content/css/select2-bootstrap.css" rel="stylesheet" />
+<script src="~/Scripts/select2.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var options = { tokenSeparators: [","], tags: [] };
+            $.getJSON("/post/AutoTags", function (data) {
+                options.tags = data;
+                $("#tags").select2(options);
+            });
+
+        });
+        CKEDITOR.replace('ckeditor', { filebrowserImageUploadUrl: '/Uploader/Upload', filebrowserImageBrowseUrl: "/Uploads" });
+    </script>
 
 }
