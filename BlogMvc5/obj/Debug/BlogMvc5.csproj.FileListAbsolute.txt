@@ -52,4 +52,6 @@ C:\Users\Karim\documents\visual studio 2013\Projects\BlogMvc5\BlogMvc5\bin\Micro
 C:\Users\Karim\documents\visual studio 2013\Projects\BlogMvc5\BlogMvc5\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
 C:\Users\Karim\documents\visual studio 2013\Projects\BlogMvc5\BlogMvc5\obj\Debug\BlogMvc5.dll
 C:\Users\Karim\documents\visual studio 2013\Projects\BlogMvc5\BlogMvc5\obj\Debug\BlogMvc5.pdb
+C:\Users\Karim\Documents\Visual Studio 2013\Projects\BlogMvc5\BlogMvc5\obj\Debug\BlogMvc5.Migrations.InitialCreate.resources
+C:\Users\Karim\Documents\Visual Studio 2013\Projects\BlogMvc5\BlogMvc5\obj\Debug\BlogMvc5.csproj.GenerateResource.Cache
 C:\Users\Karim\Documents\Visual Studio 2013\Projects\BlogMvc5\BlogMvc5\obj\Debug\BlogMvc5.csprojResolveAssemblyReference.cache

@@ -7,121 +7,115 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using BlogMvc5.Models;
+using BlogMvc5.Models.UnitOfWork;
 
 namespace BlogMvc5.Controllers
 {
     public class PostController : Controller
     {
-        private BlogDbContext db = new BlogDbContext();
-
-        // GET: /Post/
+       IUnitOfWork _uow;
+        public PostController()
+        {
+            _uow = new UnitOfWork();
+        }
+        public PostController(IUnitOfWork uof) // Fake 
+        {
+            _uow = uof;
+        }
+        //
+        // GET: /Posts/
         public ActionResult Index()
         {
-            return View(db.Posts.ToList());
+            var model = _uow.Posts.List();
+            return View(model);
         }
 
-        // GET: /Post/Details/5
-        public ActionResult Details(int? id)
+        //
+        // GET: /Posts/Details/5
+        public ActionResult Details(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Posts posts = db.Posts.Find(id);
-            if (posts == null)
-            {
-                return HttpNotFound();
-            }
-            return View(posts);
+            var model = _uow.Posts.Find(id);
+            return View(model);
         }
-
-        // GET: /Post/Create
+        //
+        // GET: /Posts/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: /Post/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //
+        // POST: /Posts/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="Id,Content,Title,TagId")] Posts posts)
+        [ValidateInput(false)]
+        public ActionResult Create(Posts postToCreate) //, Tag newTag)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.Posts.Add(posts);
-                db.SaveChanges();
+                // TODO: Add insert logic here
+                _uow.Posts.Add(postToCreate);
+
+                //_uow.Tags.Add(newTag);
+
+                _uow.Save();
+                //
                 return RedirectToAction("Index");
             }
-
-            return View(posts);
+            catch
+            {
+                return View("error");
+            }
         }
 
-        // GET: /Post/Edit/5
-        public ActionResult Edit(int? id)
+        //
+        // GET: /Posts/Edit/5
+        public ActionResult Edit(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Posts posts = db.Posts.Find(id);
-            if (posts == null)
-            {
-                return HttpNotFound();
-            }
-            return View(posts);
+            var model = _uow.Posts.Find(id);
+            return View(model);
         }
 
-        // POST: /Post/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //
+        // POST: /Posts/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="Id,Content,Title,TagId")] Posts posts)
+        public ActionResult Edit(int id, Posts postToUpdate)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.Entry(posts).State = EntityState.Modified;
-                db.SaveChanges();
+                // TODO: Add update logic here
+                _uow.Posts.Edit(id, postToUpdate);
+                _uow.Save();
                 return RedirectToAction("Index");
             }
-            return View(posts);
+            catch
+            {
+                return View();
+            }
         }
 
-        // GET: /Post/Delete/5
-        public ActionResult Delete(int? id)
+        //
+        // GET: /Posts/Delete/5
+        public ActionResult Delete(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Posts posts = db.Posts.Find(id);
-            if (posts == null)
-            {
-                return HttpNotFound();
-            }
-            return View(posts);
+            var model = _uow.Posts.Find(id);
+            return View(model);
         }
 
-        // POST: /Post/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        //
+        // POST: /Posts/Delete/5
+        [HttpPost]
+        public ActionResult Delete(int id, Posts postToDelete)
         {
-            Posts posts = db.Posts.Find(id);
-            db.Posts.Remove(posts);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
+            try
             {
-                db.Dispose();
+                // TODO: Add delete logic here
+                _uow.Posts.Delete(id);
+                return RedirectToAction("Index");
             }
-            base.Dispose(disposing);
+            catch
+            {
+                return View();
+            }
         }
     }
 }
