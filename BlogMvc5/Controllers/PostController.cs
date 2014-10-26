@@ -50,30 +50,35 @@ namespace BlogMvc5.Controllers
         [ValidateInput(false)]
         public ActionResult Create(Posts postToCreate, string Tags) //, Tag newTag)
         {
+        
             try
             {
-                // TODO: Add insert logic here
-                string[] AllTags = Tags.Split(new char[] {','});
-                foreach (var tag in AllTags)
+                if (ModelState.IsValid)
                 {
-                    var existedTag = GetTagIfExisted(tag);
-                    if (existedTag!=null)
+                    // TODO: Add insert logic here
+                    string[] AllTags = Tags.Split(new char[] {','});
+                    foreach (var tag in AllTags)
                     {
-                        postToCreate.Tags.Add(existedTag);
+                        var existedTag = GetTagIfExisted(tag);
+                        if (existedTag != null)
+                        {
+                            postToCreate.Tags.Add(existedTag);
+                        }
+                        else
+                        {
+                            postToCreate.Tags.Add(new Tag {TagName = tag});
+                        }
+
                     }
-                    else
-                    {
-                        postToCreate.Tags.Add(new Tag { TagName = tag });
-                    }
-                   
+                    _uow.Posts.Add(postToCreate);
+
+                    //_uow.Tags.Add(newTag);
+
+                    _uow.Save();
+                    //
+                    return RedirectToAction("Index");
                 }
-                _uow.Posts.Add(postToCreate);
-
-                //_uow.Tags.Add(newTag);
-
-                _uow.Save();
-                //
-                return RedirectToAction("Index");
+                return View(postToCreate);
             }
             catch
             {

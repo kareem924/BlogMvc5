@@ -8,6 +8,7 @@
 
 @using (@Html.BeginForm("Create", "Post", FormMethod.Post))
 {
+     @Html.ValidationSummary(true)
     <table class="table">
         <tr>
             <td>
@@ -15,6 +16,7 @@
             </td>
             <td>
                 @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Title)
             </td>
         </tr>
         <tr>
@@ -23,6 +25,7 @@
             </td>
             <td>
                 @Html.TextAreaFor(model => model.Content, new { @class = "ckeditor", id = "ckeditor" })
+                @Html.ValidationMessageFor(model => model.Content)
             </td>
         </tr>
         <tr>
