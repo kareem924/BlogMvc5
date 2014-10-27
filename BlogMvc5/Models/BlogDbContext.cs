@@ -3,13 +3,17 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 
 namespace BlogMvc5.Models
 {
-    public class BlogDbContext:DbContext
+    public class ApplicationUser : IdentityUser
     {
-
+    }
+    public class BlogDbContext : IdentityDbContext<ApplicationUser>
+    {
+        public BlogDbContext() : base("BlogDbContext") { }
         public virtual DbSet<Posts> Posts { get; set; }
         public virtual DbSet<Tag> Tags { get; set; }
         public virtual DbSet<Comment> Comments { get; set; }

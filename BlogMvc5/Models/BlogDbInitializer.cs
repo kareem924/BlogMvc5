@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace BlogMvc5.Models
 {
@@ -20,6 +22,17 @@ namespace BlogMvc5.Models
                     new Tag{TagName = "Razor"}
                 }
             });
+            context.Roles.Add(new IdentityRole("Managers"));
+            context.Roles.Add(new IdentityRole("Authors"));
+
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+
+            var user = new ApplicationUser { UserName = "admin" };
+
+            userManager.Create(user, "123123");
+
+            userManager.AddToRole(user.Id, "Managers");
+
             context.SaveChanges();
             base.Seed(context);
         }

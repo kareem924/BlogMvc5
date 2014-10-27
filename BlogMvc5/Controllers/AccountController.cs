@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
 using BlogMvc5.Models;
+using WebGrease;
 
 namespace BlogMvc5.Controllers
 {
@@ -16,7 +17,7 @@ namespace BlogMvc5.Controllers
     public class AccountController : Controller
     {
         public AccountController()
-            : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext())))
+            : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new BlogDbContext())))
         {
         }
 
@@ -64,15 +65,18 @@ namespace BlogMvc5.Controllers
         //
         // GET: /Account/Register
         [AllowAnonymous]
+        [Authorize(Roles = "Managers")]
         public ActionResult Register()
         {
+            var context = new BlogDbContext();
+            ViewBag.Roles = new SelectList(context.Roles, "id", "Name");
             return View();
         }
 
         //
         // POST: /Account/Register
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize(Roles = "Managers")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {

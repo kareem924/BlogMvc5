@@ -11,6 +11,7 @@ using BlogMvc5.Models.UnitOfWork;
 
 namespace BlogMvc5.Controllers
 {
+    [Authorize(Roles = "Authors")]
     public class PostController : Controller
     {
        IUnitOfWork _uow;
@@ -30,7 +31,7 @@ namespace BlogMvc5.Controllers
             return View(model);
         }
 
-        //
+        [AllowAnonymous]
         // GET: /Posts/Details/5
         public ActionResult Details(int id)
         {

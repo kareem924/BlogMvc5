@@ -3,27 +3,30 @@
 @{
     ViewBag.Title = "Index";
 }
-<br/>
-<p>
-    @Html.ActionLink("Create new Post","Create",null,new{@class="btn btn-info"})
-</p>
+<br />
+@if (User.IsInRole("Authors"))
+{
+    <p>
+        @Html.ActionLink("Create new Post", "Create", null, new { @class = "btn btn-info" })
+    </p>
+}
 <h2>Index</h2>
 
 @foreach (var posts in Model)
 {
     <article>
-        <h2>@Html.DisplayTextFor(model=>posts.Title)</h2>
+        <h2>@Html.DisplayTextFor(model => posts.Title)</h2>
         @if (@posts.Comments.Count > 0)
         {
             @posts.Comments.Count
         }
         <p>
             <div>
-          @posts.Content.Substring(0, 50)
-                <br/>
+                @posts.Content.Substring(0, 50)
+                <br />
             </div>
 
-            @Html.ActionLink("More","Details",new{id=posts.Id},new{@class="btn btn-default"})
+            @Html.ActionLink("More", "Details", new { id = posts.Id }, new { @class = "btn btn-default" })
         </p>
     </article>
 }
