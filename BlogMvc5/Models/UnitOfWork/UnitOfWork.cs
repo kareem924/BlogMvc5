@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using BlogMvc5.Models.Repositories;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace BlogMvc5.Models.UnitOfWork
 {
@@ -23,6 +24,30 @@ namespace BlogMvc5.Models.UnitOfWork
                     return new EfGenericRepository<Posts>(_context);
                 }
                 return _posts;
+            }
+        }
+        private IGenericRepository<IdentityRole> _Roles;
+        public Repositories.IGenericRepository<IdentityRole> Roles
+        {
+            get
+            {
+                if (_Roles == null)
+                {
+                    return new EfGenericRepository<IdentityRole>(_context);
+                }
+                return _Roles;
+            }
+        }
+        private IGenericRepository<ApplicationUser> _users;
+        public Repositories.IGenericRepository<ApplicationUser> Users
+        {
+            get
+            {
+                if (_users == null)
+                {
+                    return new EfGenericRepository<ApplicationUser>(_context);
+                }
+                return _users;
             }
         }
         private IGenericRepository<Tag> _tags;

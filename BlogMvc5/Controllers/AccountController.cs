@@ -69,7 +69,7 @@ namespace BlogMvc5.Controllers
         public ActionResult Register()
         {
             var context = new BlogDbContext();
-            ViewBag.Roles = new SelectList(context.Roles, "id", "Name");
+            ViewBag.RoleName = new SelectList(context.Roles, "Name", "Name");
             return View();
         }
 
@@ -86,8 +86,9 @@ namespace BlogMvc5.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Index", "Home");
+                    UserManager.AddToRole(user.Id, model.RoleName);
+                    //await SignInAsync(user, isPersistent: false);
+                    return RedirectToAction("Index", "Users");
                 }
                 else
                 {
