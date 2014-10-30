@@ -16,7 +16,7 @@ namespace BlogMvc5.Models
         public BlogDbContext() : base("BlogDbContext") { }
         public virtual DbSet<Posts> Posts { get; set; }
         public virtual DbSet<Tag> Tags { get; set; }
-        public virtual DbSet<Comment> Comments { get; set; }
+        public  DbSet<Comment> Comments { get; set; }
         public virtual DbSet<Page> Pages { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

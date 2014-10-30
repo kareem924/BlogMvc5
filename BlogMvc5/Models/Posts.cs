@@ -23,6 +23,6 @@ namespace BlogMvc5.Models
         public string Title { get; set; }
 
         public virtual ICollection<Tag> Tags { get; set; }
-        public virtual ICollection<Comment> Comments { get; set; }
+        public  ICollection<Comment> Comments { get; set; }
     }
 }

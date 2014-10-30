@@ -11,6 +11,7 @@ namespace BlogMvc5.Models
           [Key]
         public int Id { get; set; }
         public string Body { get; set; }
-        public virtual Posts post { get; set; }
+        //public  Posts post { get; set; }
+        public int PostId { get; set; }
     }
 }

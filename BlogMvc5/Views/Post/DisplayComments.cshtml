@@ -1,0 +1,39 @@
+﻿<div data-bind="foreach:comments">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <span class="glyphicon glyphicon-user"></span>
+            <span data-bind="text:Id"></span>
+            <div class="panel-body">
+                <span data-bind="text:Body"></span>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <textarea data-bind="value:Body" class="form-control"></textarea>
+    <button name="name" value="" data-bind="click:Save" class="btn btn-primary">
+        <span class="glyphicon glyphicon-plus"></span>
+        Add Comment
+    </button>
+</div>
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script src="~/Scripts/knockout-3.2.0.js"></script>
+<script type="text/javascript">
+    function CommentsViewModel() {
+        this.comments = ko.observableArray();
+        self.Body = ko.observable();
+        this.init = function () {
+            $.getJSON('@Url.Action("DisplayCommentsByPostId",new{id=ViewContext.RouteData.Values["ID"]})', this.comments);
+        }
+        self.Save = function () {
+            $.post("/Post/AddComment", new { body: this.Body(), PostID: "@ViewContext.RouteData.Values["ID"]" }, function (data) {
+                self.comments.push(data);
+                self.Body("");
+            })
+        }
+    }
+
+    var ViewModel = new CommentsViewModel();
+    ViewModel.init();
+    ko.applyBindings(ViewModel);
+</script>

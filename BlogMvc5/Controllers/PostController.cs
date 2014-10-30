@@ -11,7 +11,7 @@ using BlogMvc5.Models.UnitOfWork;
 
 namespace BlogMvc5.Controllers
 {
-    [Authorize(Roles = "Authors")]
+   
     public class PostController : Controller
     {
        IUnitOfWork _uow;
@@ -37,6 +37,26 @@ namespace BlogMvc5.Controllers
         {
             var model = _uow.Posts.Find(id);
             return View(model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult DisplayCommentsByPostId(int id)
+        {
+            if (id>0)
+            {
+                var comments = _uow.Comments.List(comment => comment.PostId == id);
+                return Json(comments, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new List<Comment>(), JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        [AllowAnonymous]
+        public JsonResult AddComment(string body, int postID)
+        {
+            Comment newComment = new Comment() { Body = body, PostId = postID };
+            _uow.Comments.Add(newComment);
+            _uow.Save();
+            return Json(newComment);
         }
         //
         // GET: /Posts/Create

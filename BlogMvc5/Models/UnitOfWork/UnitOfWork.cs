@@ -26,6 +26,18 @@ namespace BlogMvc5.Models.UnitOfWork
                 return _posts;
             }
         }
+        private IGenericRepository<Comment> _comments;
+        public Repositories.IGenericRepository<Comment> Comments
+        {
+            get
+            {
+                if (_comments == null)
+                {
+                    return new EfGenericRepository<Comment>(_context);
+                }
+                return _comments;
+            }
+        }
         private IGenericRepository<IdentityRole> _Roles;
         public Repositories.IGenericRepository<IdentityRole> Roles
         {

@@ -15,6 +15,7 @@ namespace BlogMvc5.Models.UnitOfWork
         IGenericRepository<Tag> Tags { get; }
         IGenericRepository<ApplicationUser> Users { get; }
         IGenericRepository<IdentityRole> Roles { get; }
+        IGenericRepository<Comment> Comments { get; }
         void Save(); //Commit
 
     }

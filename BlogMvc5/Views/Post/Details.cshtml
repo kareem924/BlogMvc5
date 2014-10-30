@@ -8,13 +8,13 @@
 <article>
     <h2>@Html.DisplayTextFor(model => model.Title)</h2>
     <p>@Html.Raw(@Model.Content)</p>
-    <section>
+    @*<section>
         @foreach (var comments in Model.Comments)
         {
             <p>@comments.Body</p>
             <br />
         }
-    </section>
+    </section>*@
     <section>
         <ul>
             @foreach (var Tags in Model.Tags)
@@ -24,5 +24,13 @@
                 </li>
             }
         </ul>
+    </section>
+    <section>
+        <fieldset>
+            <legend>Comments</legend>
+            <div>
+                @Html.Partial("DisplayComments")
+            </div>
+        </fieldset>
     </section>
 </article>
