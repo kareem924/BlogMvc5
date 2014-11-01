@@ -33,32 +33,47 @@ namespace BlogMvc5.Controllers
         [HttpPost]
         public ActionResult Contact(Models.MailForm form)
         {
-            //Send Mail
-            MailMessage msg = new MailMessage();
-            msg.To.Add("customerService@site.com");
-            msg.From = new MailAddress("webmaster@site.com");
-            msg.CC.Add("admin@site.com");
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    //Send Mail
+                    MailMessage msg = new MailMessage();
+                    msg.To.Add("customerService@site.com");
+                    msg.From = new MailAddress("webmaster@site.com");
+                    msg.CC.Add("admin@site.com");
 
-            msg.Subject = form.Subject;
+                    msg.Subject = form.Subject;
 
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine("Message From Site.com");
-            sb.AppendFormat("<b>Customer Name </b>: {0} ", form.Name);
-            sb.AppendFormat("Cutomer Mail : {0}", form.Mail);
-            sb.AppendFormat("Subject : {0}", form.Subject);
-            sb.AppendFormat("Message : {0}", form.Body);
-            msg.IsBodyHtml = true;
+                    StringBuilder sb = new StringBuilder();
+                    sb.AppendLine("Message From Site.com");
+                    sb.AppendFormat("<b>Customer Name </b>: {0} ", form.Name);
+                    sb.AppendFormat("Cutomer Mail : {0}", form.Mail);
+                    sb.AppendFormat("Subject : {0}", form.Subject);
+                    sb.AppendFormat("Message : {0}", form.Body);
+                    msg.IsBodyHtml = true;
 
-            msg.Body = sb.ToString();
-            //Gmail - Yahoo
-            SmtpClient client = new SmtpClient("smtp.site.com", 25);
-            client.Credentials = new NetworkCredential("UserName", "password");
+                    msg.Body = sb.ToString();
+                    //Gmail - Yahoo
+                    SmtpClient client = new SmtpClient("smtp.site.com", 25);
+                    client.Credentials = new NetworkCredential("UserName", "password");
 
-            client.Send(msg);
+                    client.Send(msg);
 
-            ViewBag.Message = "Your Message has been sent";
-
-            return View();
+                    ViewBag.Message = "Your Message has been sent";
+                    ViewBag.Status = "success";
+                    return View();
+                }
+                ViewBag.Message = "Please, correct your info , and try again !";
+                ViewBag.Status = "danger";
+                return View(form);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = "We cann't send your message , please try again";
+                ViewBag.Status = "danger";
+                return View(form);
+            }
         }
     }
 }

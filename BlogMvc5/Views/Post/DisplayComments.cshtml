@@ -10,30 +10,55 @@
     </div>
 </div>
 <div>
-    <textarea data-bind="value:Body" class="form-control"></textarea>
-    <button name="name" value="" data-bind="click:Save" class="btn btn-primary">
-        <span class="glyphicon glyphicon-plus"></span>
-        Add Comment
-    </button>
+  
+    <table cellpadding="5" width="90%">
+        <tr>
+            <td>
+                <b> Add Comment </b>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td width="85%">
+                <textarea data-bind="value:Body" class="form-control" style="max-width:750px;" required></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <button name="name" value="" data-bind="click:Save" class="btn btn-primary navbar-right">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    Add Comment
+                </button>
+            </td>
+        </tr>
+    </table>
 </div>
 <script src="~/Scripts/jquery-1.10.2.js"></script>
 <script src="~/Scripts/knockout-3.2.0.js"></script>
 <script type="text/javascript">
     function CommentsViewModel() {
-        this.comments = ko.observableArray();
+        var self = this;
+        self.comments = ko.observableArray();
         self.Body = ko.observable();
-        this.init = function () {
-            $.getJSON('@Url.Action("DisplayCommentsByPostId",new{id=ViewContext.RouteData.Values["ID"]})', this.comments);
+
+        self.init = function () {
+            $.getJSON("/Post/DisplayCommentsByPostId/@ViewContext.RouteData.Values["ID"]", this.comments);
         }
+      
         self.Save = function () {
-            $.post("/Post/AddComment", new { body: this.Body(), PostID: "@ViewContext.RouteData.Values["ID"]" }, function (data) {
+            if (this.Body()) {
+            $.post("/Post/AddComment", { body: this.Body(), PostID: "@ViewContext.RouteData.Values["ID"]" }, function (data) {
                 self.comments.push(data);
                 self.Body("");
             })
         }
+        }
     }
 
-    var ViewModel = new CommentsViewModel();
-    ViewModel.init();
-    ko.applyBindings(ViewModel);
+    var viewModel = new CommentsViewModel();
+    viewModel.init();
+
+    ko.applyBindings(viewModel);
 </script>

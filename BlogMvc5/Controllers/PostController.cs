@@ -33,10 +33,15 @@ namespace BlogMvc5.Controllers
 
         [AllowAnonymous]
         // GET: /Posts/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(int? id)
         {
-            var model = _uow.Posts.Find(id);
-            return View(model);
+            if (id.HasValue)
+            {
+                var model = _uow.Posts.Find(id.Value);
+                return View(model);
+                
+            }
+            return HttpNotFound();
         }
 
         [AllowAnonymous]
@@ -69,7 +74,7 @@ namespace BlogMvc5.Controllers
         // POST: /Posts/Create
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult Create(Posts postToCreate, string Tags) //, Tag newTag)
+        public ActionResult Create([Bind(Exclude = "Tags")] Posts postToCreate, string Tags) //, Tag newTag)
         {
         
             try
@@ -112,20 +117,45 @@ namespace BlogMvc5.Controllers
         public ActionResult Edit(int id)
         {
             var model = _uow.Posts.Find(id);
-            return View(model);
+            if (model != null)
+                return View(model);
+            return HttpNotFound();
         }
 
         //
         // POST: /Posts/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, Posts postToUpdate)
+        [ValidateInput(false)]
+        public ActionResult Edit(int id, Posts postToUpdate, string Tags)
         {
             try
-            {
-                // TODO: Add update logic here
-                _uow.Posts.Edit(id, postToUpdate);
-                _uow.Save();
-                return RedirectToAction("Index");
+            { // TODO: Add update logic here
+                var existedPost = _uow.Posts.Find(id);
+                if (existedPost != null)
+                {
+                    existedPost.Title = postToUpdate.Title;
+                    existedPost.Content = postToUpdate.Content;
+                    existedPost.Tags.Clear();
+                    string[] alltags = Tags.Split(new char[] { ',' });
+
+                    foreach (var tag in alltags)
+                    {
+                        var existedTag = GetTagIfExisted(tag.Trim());
+                        if (existedTag != null)
+                        {
+                            existedPost.Tags.Add(existedTag);
+                        }
+                        else
+                        {
+                            existedPost.Tags.Add(new Tag { TagName = tag.Trim() });
+                        }
+                    }
+                    _uow.Posts.Edit(id, existedPost);
+                    _uow.Save();
+                    return RedirectToAction("Index");
+                }
+
+                return RedirectToAction("Edit",postToUpdate);
             }
             catch
             {
@@ -138,7 +168,9 @@ namespace BlogMvc5.Controllers
         public ActionResult Delete(int id)
         {
             var model = _uow.Posts.Find(id);
-            return View(model);
+            if (model != null)
+                return View(model);
+            return HttpNotFound();
         }
 
         //
@@ -150,6 +182,7 @@ namespace BlogMvc5.Controllers
             {
                 // TODO: Add delete logic here
                 _uow.Posts.Delete(id);
+                _uow.Save();
                 return RedirectToAction("Index");
             }
             catch

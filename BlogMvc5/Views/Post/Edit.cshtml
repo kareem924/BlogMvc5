@@ -1,10 +1,10 @@
 ﻿@model BlogMvc5.Models.Posts
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Edit";
 }
 
-
+<h2>Create</h2>
 
 @using (@Html.BeginForm("Edit", "Post", FormMethod.Post))
 {
@@ -33,7 +33,7 @@
                 @Html.LabelFor(model => model.Tags)
             </td>
             <td>
-                <input type="hidden" name="tags" id="tags" style="width:600px" tabindex="-1" class="select2-offscreen form-control" >
+                <input type="hidden" name="tags" id="tags" style="width:600px" tabindex="-1" class="select2-offscreen form-control" value="@string.Join(",",Model.Tags.Select(t=> t.TagName ).ToArray())">
                 <div class="select2-container select2-container-multi" id="s2id_e20" style="width: 600px;">
                 </div>
                 <p>You can type more than one tag using comma(ex: MVCV,RAZOR,ETC)</p>
@@ -41,7 +41,7 @@
         </tr>
         <tr>
             <td></td>
-            <td><input type="submit" value="Update" class="btn btn-success" /></td>
+            <td><input type="submit" value="Create" class="btn btn-success" /></td>
         </tr>
     </table>
 }

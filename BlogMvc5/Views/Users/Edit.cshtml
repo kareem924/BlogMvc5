@@ -37,7 +37,7 @@
         @using (Html.BeginForm("AddToRole", "Users"))
         {
             @Html.DropDownList("roleName", null, new { @class = "form-control col-lg-10" })
-            @Html.HiddenFor(model => model.UserId)
+            @Html.HiddenFor(model => model.Id)
             <input type="submit" name="name" value="Add" class="btn btn-primary " />
         }
     </div>
@@ -49,7 +49,7 @@
         @using (Html.BeginForm("RemoveFromRole", "Users"))
         {
             @Html.DropDownList("roleName", null, new { @class = "form-control col-lg-10" })
-            @Html.HiddenFor(model => model.UserId)
+            @Html.HiddenFor(model => model.Id)
             <input type="submit" name="name" value="Remove" class="btn btn-danger " />
         }
     </div>

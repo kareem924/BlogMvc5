@@ -5,16 +5,18 @@
 }
 
 <h2>Contact</h2>
-<div>
-    @ViewBag.Message
+<div class="panel panel-@ViewBag.Status">
+    <div class="panel-heading">
+        @ViewBag.Message
+    </div>
 </div>
 @using (Html.BeginForm("Contact","Home")) 
 {
  
       @Html.ValidationSummary(true)
     <div class="form-horizontal">
-        <h4>MailForm</h4>
-        <hr />
+       
+     
         @Html.ValidationSummary(true)
 
         <div class="form-group">
@@ -57,6 +59,6 @@
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

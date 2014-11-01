@@ -35,9 +35,9 @@
             @if (string.Compare(User.Identity.Name, "admin", true) == 0)
             {
                 <td>
-                    @Html.ActionLink("Change Role", "Edit", new { UserId = item.UserName }, new { @class = "btn btn-primary" }) |
+                    @Html.ActionLink("Change Role", "Edit", new { Id = item.Id }, new { @class = "btn btn-primary" }) |
 
-                    @Html.ActionLink("Delete", "Delete", new { UserId = item.UserName }, new { @class = "btn btn-danger" })
+                    @Html.ActionLink("Delete", "Delete", new { Id = item.Id }, new { @class = "btn btn-danger" })
                 </td>
             }
         </tr>

@@ -2,7 +2,12 @@
 @{
     ViewBag.Title = "Index";
 }
-new {  }
+
+<div class="panel panel-@ViewBag.Status">
+    <div class="panel-heading">
+        @ViewBag.Message
+    </div>
+</div>
 <fieldset>
     <legend>Apply</legend>
     <div>
@@ -11,7 +16,10 @@ new {  }
             <table class="table">
                 <tr>
                     <td>Email</td>
-                    <td>@Html.TextBoxFor(p => p.Email, new { @class = "form-control" })</td>
+                    <td>@Html.TextBoxFor(p => p.Email, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(c => c.Email)
+                    </td>
+                
                 </tr>
                 <tr>
                     <td>Job Title</td>

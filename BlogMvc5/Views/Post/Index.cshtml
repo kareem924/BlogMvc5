@@ -11,22 +11,30 @@
     </p>
 }
 <h2>Index</h2>
-
+<div class="panel panel-primary">
+    <div class="panel-body panel-heading">
+        <h4>Latest Posts </h4>
+    </div>
+</div>
 @foreach (var posts in Model)
 {
-    <article>
-        <h2>@Html.DisplayTextFor(model => posts.Title)</h2>
-        @if (@posts.Comments.Count > 0)
-        {
-            @posts.Comments.Count
-        }
-        <p>
-            <div>
-                @posts.Content.Substring(0, 50)
-                <br />
-            </div>
+    <div class="panel panel-default">
+        <div class="panel-body panel-heading">
+            <article>
+                <h2>@Html.DisplayTextFor(model => posts.Title)</h2>
+                @if (@posts.Comments.Count > 0)
+                {
+                    @posts.Comments.Count
+                }
+                <p>
+                    <div>
+                        @Html.Raw(posts.Content.Length > 50 ? posts.Content.Substring(0, 50) : posts.Content) ..
+                        <br />
+                    </div>
 
-            @Html.ActionLink("More", "Details", new { id = posts.Id }, new { @class = "btn btn-default" })
-        </p>
-    </article>
+                    @Html.ActionLink("More", "Details", new { id = posts.Id }, new { @class = "btn btn-default" })
+                </p>
+            </article>
+        </div>
+    </div>
 }

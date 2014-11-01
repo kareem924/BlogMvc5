@@ -27,7 +27,7 @@ namespace BlogMvc5.Controllers
         {
             var allUsers = _uow.Users.List().Select(user => new UserRoleViewModel
             {
-                UserId = user.Id,
+                Id = user.Id,
                 UserName = user.UserName,
                 Roles = user.Roles.Select(role => new RoleViewModel
                 {
@@ -36,9 +36,9 @@ namespace BlogMvc5.Controllers
             });
             return View(allUsers);
         }
-        public ActionResult Edit(string userid)
+        public ActionResult Edit(string Id)
         {
-            var selectedUser = _uow.Users.List(user => user.UserName == userid).Select(user => new Models.UserRoleViewModel
+            var selectedUser = _uow.Users.List(user => user.Id == Id).Select(user => new Models.UserRoleViewModel
             {
                 UserName = user.UserName,
                 Roles = user.Roles.Select(role => new Models.RoleViewModel
@@ -54,9 +54,9 @@ namespace BlogMvc5.Controllers
           
             return View("edit", selectedUser);
         }
-        public ActionResult AddToRole(string userId, string roleName)
+        public ActionResult AddToRole(string Id, string roleName)
         {
-            var result = this.AddUserToRole(userId, roleName);
+            var result = this.AddUserToRole(Id, roleName);
             if (result.Succeeded)
             {
                 ViewBag.Message = "User has been added to role successfully!.";
@@ -68,14 +68,14 @@ namespace BlogMvc5.Controllers
                     ModelState.AddModelError("", error);
                 }
             }
-            return this.Edit(userId);
+            return this.Edit(Id);
         }
 
-        public ActionResult RemoveFromRole(string userId, string roleName)
+        public ActionResult RemoveFromRole(string Id, string roleName)
         {
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new BlogDbContext()));
 
-            var result = userManager.RemoveFromRole(userId, roleName);
+            var result = userManager.RemoveFromRole(Id, roleName);
             if (result.Succeeded)
             {
                 ViewBag.Message = "User has been removed from role successfully!.";
@@ -87,15 +87,15 @@ namespace BlogMvc5.Controllers
                     ModelState.AddModelError("", error);
                 }
             }
-            return this.Edit(userId);
+            return this.Edit(Id);
         }
-        private IdentityResult AddUserToRole(string userId, string roleName)
+        private IdentityResult AddUserToRole(string Id, string roleName)
         {
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new BlogDbContext()));
             IdentityResult result;
-            if (!userManager.IsInRole(userId, roleName))
+            if (!userManager.IsInRole(Id, roleName))
             {
-                result = userManager.AddToRole(userId, roleName);
+                result = userManager.AddToRole(Id, roleName);
             }
             else
             {

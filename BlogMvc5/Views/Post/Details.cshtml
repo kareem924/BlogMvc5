@@ -3,34 +3,53 @@
 @{
     ViewBag.Title = "Details";
 }
-
-<h2>Details</h2>
+<br />
+@if (User.IsInRole("Managers"))
+{
+    @Html.ActionLink("Delete", "Delete", "Post", new { id = Model.Id }, new { @class = "btn btn-danger" })
+}
+@if (User.IsInRole("Managers"))
+{
+    @Html.ActionLink("Edit", "Edit", "Post", new { id = Model.Id }, new { @class = "btn btn-info" })
+}
 <article>
-    <h2>@Html.DisplayTextFor(model => model.Title)</h2>
-    <p>@Html.Raw(@Model.Content)</p>
-    @*<section>
-        @foreach (var comments in Model.Comments)
-        {
-            <p>@comments.Body</p>
-            <br />
-        }
-    </section>*@
-    <section>
-        <ul>
-            @foreach (var Tags in Model.Tags)
-            {
-                <li>
-                    <a href="/Post/Tags/@Tags.TagId"><p>@Tags.TagName</p></a>  
-                </li>
-            }
-        </ul>
-    </section>
-    <section>
-        <fieldset>
-            <legend>Comments</legend>
+    <div class="panel panel-default">
+        <div class="panel-body panel-heading">
+            <h4>@Html.DisplayTextFor(model => model.Title)</h4>
+        </div>
+    </div>
+    <div class="panel panel-primary">
+        <div class="panel-body ">
             <div>
-                @Html.Partial("DisplayComments")
+                <p>@Html.Raw(@Model.Content)</p>
+                <hr />
+                <section>
+                    <div class="panel panel-info">
+                        <div class="panel-body panel-heading">
+                            <ul>
+                                <strong>  Tags:</strong>
+                                @foreach (var Tags in Model.Tags)
+                                {
+
+                                    <li class="btn btn-default">
+                                        <a href="/Post/Tags/@Tags.TagId"><p>@Tags.TagName</p></a>
+                                    </li>
+
+
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <fieldset>
+                        <legend>Comments</legend>
+                        <div>
+                            @Html.Partial("DisplayComments")
+                        </div>
+                    </fieldset>
+                </section>
             </div>
-        </fieldset>
-    </section>
+        </div>
+    </div>
 </article>
